@@ -43,7 +43,7 @@ services:
     ports:
       - "1800:80"
   onlyoffice:
-    image: onlyoffice/documentserver:latest
+    image: land007/documentserver:latest
     restart: always
     networks:
       - internal_network
