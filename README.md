@@ -3,6 +3,13 @@
 ## 当前镜像基于最新社区版 v2.02 构建。
 
 ## 快速部署
+```bash
+git clone https://github.com/land007/DzzOffice.git
+cd DzzOffice
+sudo docker-compose up -d
+```
+
+## 手动部署
 
 ### 部署安装Mysql 5.7数据库
 

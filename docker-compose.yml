@@ -1,0 +1,73 @@
+version: "2.2"
+networks:
+  internal_network:
+services:
+  mysql:
+    restart: always
+    networks:
+      - internal_network
+    #network_mode: bridge
+    image: mysql:5.7.27
+    environment:
+      - MYSQL_ROOT_PASSWORD=gmtools
+    volumes:
+      - ~/docker/mysql:/var/lib/mysql
+    expose:
+      - "3306"
+    ports:
+      - "3307:3306"
+  phpmyadmin:
+    restart: always
+    #network_mode: bridge
+    image: phpmyadmin/phpmyadmin:4.7.9-1
+    links:
+      - "mysql"
+    environment:
+      - PMA_HOST=mysql
+    volumes:
+      - ~/Documents/Kitematic/mysql:/var/lib/mysql
+    expose:
+      - "80"
+    ports:
+      - "1801:80"
+  dzzoffice:
+    restart: always
+    networks:
+      - internal_network
+    #network_mode: bridge
+    image: land007/dzzoffice:latest
+    links:
+      - "mysql"
+    expose:
+      - "80"
+    ports:
+      - "1800:80"
+  onlyoffice:
+    image: onlyoffice/documentserver:latest
+    restart: always
+    networks:
+      - internal_network
+    #network_mode: bridge
+    expose:
+      - "80"
+    ports:
+      - "8000:80"
+  collabora:
+    image: collabora/code:latest
+    restart: always
+    networks:
+      - internal_network
+    #network_mode: bridge
+    expose:
+      - "9980"
+    ports:
+      - "9980:9980"
+    environment:
+      - username=admin
+      - password=S3cRet
+
+#http://192.168.1.218:8000/web-apps/apps/api/documents/api.js
+
+#unset ${!DOCKER_*}
+#sudo docker-compose up -d
+#sudo docker-compose down
