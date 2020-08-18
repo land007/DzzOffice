@@ -40,8 +40,8 @@ services:
       - "mysql"
     expose:
       - "80"
-    ports:
-      - "1800:80"
+    #ports:
+      #- "1800:80"
   onlyoffice:
     image: land007/documentserver:latest
     restart: always
@@ -50,8 +50,8 @@ services:
     #network_mode: bridge
     expose:
       - "80"
-    ports:
-      - "8000:80"
+    #ports:
+      #- "8000:80"
   collabora:
     image: collabora/code:latest
     restart: always
@@ -65,9 +65,46 @@ services:
     environment:
       - username=admin
       - password=S3cRet
+  http-proxy:
+    image: land007/http-proxy:latest
+    restart: always
+    networks:
+      - internal_network
+    #network_mode: bridge
+    links:
+      - "dzzoffice"
+      - "onlyoffice"
+    expose:
+      - "80"
+    ports:
+      - "1800:80"
+    environment:
+      - http_proxy_domains=msa.gjxt.xyz:2324,msa.gjxt.xyz:2324,msa.gjxt.xyz:2324,msa.gjxt.xyz:2324,msa.gjxt.xyz:2324
+      - http_proxy_paths=/web-apps/apps/api/documents/api.js,/web-apps/,/5.4.2-46//,/cache/files/,/
+      - http_proxy_hosts=onlyoffice,onlyoffice,onlyoffice,onlyoffice,dzzoffice
+      - http_proxy_ports=80,80,80,80,80
+      - http_proxy_pretends=true,false,true,true,false
+      - ws_proxy_domains=msa.gjxt.xyz:2324
+      - ws_proxy_paths=/
+      - ws_proxy_hosts=onlyoffice
+      - ws_proxy_ports=80
+      - password=
 
-#http://192.168.1.218:8000/web-apps/apps/api/documents/api.js
+#docker cp dzz.tar.gz dzzoffice-master_dzzoffice_1:/var/www/html
+#docker exec -it dzzoffice-master_dzzoffice_1 bash
+#tar -zxvf dzz.tar.gz
+
+#OnlyOffice Document Server API地址:
+#/web-apps/apps/api/documents/api.js
+#文件服务器(dzzoffice服务器)地址:
+#http://dzzoffice/
 
 #unset ${!DOCKER_*}
 #sudo docker-compose up -d
 #sudo docker-compose down
+
+#防火墙
+#[root@liang ~]# firewall-cmd --zone=public --add-port=10800/tcp --permanent
+#[root@liang ~]# firewall-cmd --reload
+#文件存放地址
+#/var/www/html/data/attachment/dzz/
