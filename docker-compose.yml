@@ -104,7 +104,7 @@ services:
 #sudo docker-compose down
 
 #防火墙
-#[root@liang ~]# firewall-cmd --zone=public --add-port=10800/tcp --permanent
+#[root@liang ~]# firewall-cmd --zone=public --add-port=1800/tcp --permanent
 #[root@liang ~]# firewall-cmd --reload
 #文件存放地址
 #/var/www/html/data/attachment/dzz/
